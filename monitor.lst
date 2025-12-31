@@ -1,0 +1,158 @@
+0000                          .ORG   0000H   
+0000   C3 05 00               JMP   M1   
+0005                          .ORG   $+2   
+0005   31 00 10     M1:       LXI   SP,010000Q   
+0008   21 00 0C               LXI   H,006000Q   
+000B   4E           M2:       MOV   C,M   
+000C   7E                     MOV   A,M   
+000D   D3 40                  OUT   0100Q   
+0010                          .ORG   $+1   
+0010   7D                     MOV   A,L   
+0011   D3 00                  OUT   000Q   
+0013   79           M3:       MOV   A,C   
+0014   D3 02                  OUT   002Q   
+0017                          .ORG   $+1   
+0017   CD 67 00     M4:       CALL   SKL   
+001C                          .ORG   $+2   
+001C   FE 08                  CPI   010Q   
+001F                          .ORG   $+1   
+001F   D2 33 00               JNC   M11   
+0024                          .ORG   $+2   
+0024   47                     MOV   B,A   
+0025   79                     MOV   A,C   
+0026   17                     RAL      
+0027   17                     RAL      
+0028   17                     RAL      
+0029   E6 F8                  ANI   370Q   
+002C                          .ORG   $+1   
+002C   B0                     ORA   B   
+002D   4F                     MOV   C,A   
+002E   C3 13 00               JMP   M3   
+0033                          .ORG   $+2   
+0033   FE 08        M11:      CPI   010Q   
+0036                          .ORG   $+1   
+0036   C2 41 00               JNZ   M12   
+003B                          .ORG   $+2   
+003B   61                     MOV   H,C   
+003C   C3 0B 00               JMP   M2   
+0041                          .ORG   $+2   
+0041   FE 09        M12:      CPI   011Q   
+0044                          .ORG   $+1   
+0044   C2 4F 00               JNZ   M13   
+0049                          .ORG   $+2   
+0049   69                     MOV   L,C   
+004A   C3 0B 00               JMP   M2   
+004F                          .ORG   $+2   
+004F   FE 0A        M13:      CPI   012Q   
+0051   C2 5D 00               JNZ   M14   
+0056                          .ORG   $+2   
+0056   71                     MOV   M,C   
+0057   23                     INX   H   
+0058   C3 0B 00               JMP   M2   
+005D                          .ORG   $+2   
+005D   FE 0B        M14:      CPI   013Q   
+0060                          .ORG   $+1   
+0060   C2 17 00               JNZ   M4   
+0065                          .ORG   $+2   
+0065   E9                     PCHL      
+0067                          .ORG   $+1   
+0067   3E 00        SKL:      MVI   A,000Q   
+006A                          .ORG   $+1   
+006A   D3 03                  OUT   003Q   
+006D                          .ORG   $+1   
+006D   DB 03        M5:       IN   003Q   
+0070                          .ORG   $+1   
+0070   E6 0F                  ANI   017Q   
+0073                          .ORG   $+1   
+0073   FE 0F                  CPI   017Q   
+0076                          .ORG   $+1   
+0076   C2 6D 00               JNZ   M5   
+007B                          .ORG   $+2   
+007B   CD C4 00               CALL   DL   
+0080                          .ORG   $+2   
+0080   D5                     PUSH   D   
+0081   16 03        M8:       MVI   D,003Q   
+0084                          .ORG   $+1   
+0084   1E FE                  MVI   E,376Q   
+0087                          .ORG   $+1   
+0087   7B           M7:       MOV   A,E   
+0088   D3 03                  OUT   003Q   
+008B                          .ORG   $+1   
+008B   07                     RLC      
+008C   5F                     MOV   E,A   
+008D   DB 03                  IN   003Q   
+0090                          .ORG   $+1   
+0090   E6 0F                  ANI   017Q   
+0093                          .ORG   $+1   
+0093   FE 0F                  CPI   017Q   
+0096                          .ORG   $+1   
+0096   C2 AA 00               JNZ   M6   
+009B                          .ORG   $+2   
+009B   15                     DCR   D   
+009C   7A                     MOV   A,D   
+009D   FE FF                  CPI   377Q   
+00A0                          .ORG   $+1   
+00A0   C2 87 00               JNZ   M7   
+00A5                          .ORG   $+2   
+00A5   C3 81 00               JMP   M8   
+00AA                          .ORG   $+2   
+00AA   CD C4 00     M6:       CALL   DL   
+00AF                          .ORG   $+2   
+00AF   0F           M10:      RRC      
+00B0   D2 C1 00               JNC   M9   
+00B5                          .ORG   $+2   
+00B5   F5                     PUSH   PSW   
+00B6   7A                     MOV   A,D   
+00B7   C6 04                  ADI   004Q   
+00BA                          .ORG   $+1   
+00BA   57                     MOV   D,A   
+00BB   F1                     POP   PSW   
+00BC   C3 AF 00               JMP   M10   
+00C1                          .ORG   $+2   
+00C1   7A           M9:       MOV   A,D   
+00C2   D1                     POP   D   
+00C3   C9                     RET      
+00C4   F5           DL:       PUSH   PSW   
+00C5   D5                     PUSH   D   
+00C6   11 0E 02               LXI   D,001016Q   
+00CB                          .ORG   $+2   
+00CB   D1                     POP   D   
+00CC   F1                     POP   PSW   
+00CD   C9                     RET      
+
+
+M1:                 0005 DEFINED AT LINE 6
+                    > USED AT LINE 3
+M2:                 000B DEFINED AT LINE 8
+                    > USED AT LINE 39
+                    > USED AT LINE 46
+                    > USED AT LINE 53
+M3:                 0013 DEFINED AT LINE 14
+                    > USED AT LINE 32
+M4:                 0017 DEFINED AT LINE 17
+                    > USED AT LINE 57
+M11:                0033 DEFINED AT LINE 34
+                    > USED AT LINE 21
+M12:                0041 DEFINED AT LINE 41
+                    > USED AT LINE 36
+M13:                004F DEFINED AT LINE 48
+                    > USED AT LINE 43
+M14:                005D DEFINED AT LINE 55
+                    > USED AT LINE 49
+SKL:                0067 DEFINED AT LINE 61
+                    > USED AT LINE 17
+M5:                 006D DEFINED AT LINE 65
+                    > USED AT LINE 71
+M8:                 0081 DEFINED AT LINE 76
+                    > USED AT LINE 99
+M7:                 0087 DEFINED AT LINE 80
+                    > USED AT LINE 97
+M6:                 00AA DEFINED AT LINE 101
+                    > USED AT LINE 91
+M10:                00AF DEFINED AT LINE 103
+                    > USED AT LINE 112
+M9:                 00C1 DEFINED AT LINE 114
+                    > USED AT LINE 104
+DL:                 00C4 DEFINED AT LINE 117
+                    > USED AT LINE 73
+                    > USED AT LINE 101
